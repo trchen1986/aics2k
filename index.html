@@ -166,7 +166,6 @@ footer a:hover{color:var(--gold)}
     <a href="#about">關於我們</a>
     <a href="#contact">聯絡</a>
   </nav>
-  <button class="cart-btn" id="cartBtn" type="button">詢問清單 <span class="n" id="cartN">0</span></button>
 </div></header>
 
 <main id="top">
@@ -194,7 +193,6 @@ footer a:hover{color:var(--gold)}
     </div>
     <div class="act" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
       <span class="price"><s>NT$18,800</s>NT$15,800</span>
-      <button class="btn" type="button" data-add="限量 巴西金髮鈦晶原礦柱|15800">加入詢問清單</button>
     </div>
   </div>
 </div></section>
@@ -267,14 +265,6 @@ footer a:hover{color:var(--gold)}
   <div class="copy"><div class="wrap">© 2026 aics2k 晶礦室 · 商品圖為預覽示意</div></div>
 </footer>
 
-<aside class="drawer" id="drawer" hidden aria-label="詢問清單">
-  <header><h3 style="font-size:18px">詢問清單</h3><button class="btn ghost" id="closeDrawer" type="button">關閉</button></header>
-  <ul id="cartList"></ul>
-  <div class="total"><span>合計</span><span class="mono" id="cartTotal">NT$0</span></div>
-  <p style="font-size:13px;color:var(--muted);margin:0">送出後我們會透過 LINE 或 IG 私訊與你確認商品與付款方式。</p>
-  <button class="btn" type="button" id="sendList">送出詢問</button>
-  <p id="sentMsg" hidden style="font-size:13px;color:var(--gold);margin:0">預覽版尚未接上訂單系統，正式上線後這裡會送出詢問。</p>
-</aside>
 
 <script>
 const PRODUCTS={
@@ -322,28 +312,13 @@ document.querySelectorAll("[data-series]").forEach(el=>{
   el.innerHTML=PRODUCTS[k].map((p,i)=>{const sold=p[3]==="售完";return `<article class="card">
     <div class="ph"><canvas data-stone="${k}" data-seed="${i+k.length*13}"></canvas>${p[3]?`<span class="tag ${sold?"sold":""}">${p[3]}</span>`:""}</div>
     <h3>${p[0]}</h3><div class="spec">${p[1]}</div>
-    <div class="row"><span class="price">${fmt(p[2])}</span><button class="add" type="button" ${sold?"disabled":""} data-add="${p[0]}|${p[2]}">${sold?"已售出":"加入清單"}</button></div>
+    <div class="row"><span class="price">${fmt(p[2])}</span>${sold?'<span class="add" style="opacity:.45;cursor:default">已售出</span>':""}</div>
   </article>`}).join("");
 });
 const ig=document.getElementById("igGrid"),kinds=["seven","black","gold"];
 ig.innerHTML=Array.from({length:12},(_,i)=>`<a href="https://www.instagram.com/aics2k/" target="_blank" rel="noopener" aria-label="在 Instagram 查看貼文 ${i+1}"><canvas data-stone="${kinds[i%3]}" data-seed="${100+i}"></canvas>${i%4===1?'<span class="vid">影片</span>':""}</a>`).join("");
 document.querySelectorAll("canvas[data-stone]").forEach(cv=>drawStone(cv,cv.dataset.stone,+cv.dataset.seed));
 
-const cart=[],drawer=document.getElementById("drawer");
-function renderCart(){
-  document.getElementById("cartN").textContent=cart.length;
-  document.getElementById("cartList").innerHTML=cart.length?cart.map((it,i)=>`<li><span>${it.n}<br><span class="mono">${fmt(it.p)}</span></span><button type="button" data-rm="${i}">移除</button></li>`).join(""):'<li style="border:none;color:var(--muted)">還沒有挑選商品。在商品下方按「加入清單」。</li>';
-  document.getElementById("cartTotal").textContent=fmt(cart.reduce((s,it)=>s+it.p,0));
-}
-document.addEventListener("click",e=>{
-  const a=e.target.closest("[data-add]");
-  if(a){const[n,p]=a.dataset.add.split("|");if(!cart.some(it=>it.n===n))cart.push({n,p:+p});renderCart();drawer.hidden=false;document.getElementById("sentMsg").hidden=true}
-  const rm=e.target.closest("[data-rm]");if(rm){cart.splice(+rm.dataset.rm,1);renderCart()}
-});
-document.getElementById("cartBtn").onclick=()=>{renderCart();drawer.hidden=false};
-document.getElementById("closeDrawer").onclick=()=>drawer.hidden=true;
-document.getElementById("sendList").onclick=()=>document.getElementById("sentMsg").hidden=false;
-renderCart();
 </script>
 
 </body>
