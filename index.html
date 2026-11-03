@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>aics2k 晶礦室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: mineral cabinet. Dark display case, each series a drawer row, gold rutile as the one accent. */
+:root{
+  --bg:#f3f1f4; --surface:#ffffff; --sunk:#e8e4ec; --fg:#1d1922; --muted:#625b6b; --line:#d6d0dd;
+  --gold:#9a7425; --silver:#6f7480; --violet:#6a4c95; --sold:#a33a3a;
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --gutter-l:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141118; --surface:#1d1922; --sunk:#100d13; --fg:#ede8f1; --muted:#a39bab; --line:#332c3b;
+  --gold:#d6b46a; --silver:#b9bdc6; --violet:#a98bd6; --sold:#e07a7a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141118; --surface:#1d1922; --sunk:#100d13; --fg:#ede8f1; --muted:#a39bab; --line:#332c3b;
+  --gold:#d6b46a; --silver:#b9bdc6; --violet:#a98bd6; --sold:#e07a7a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.7;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.25}
+.wrap{max-width:1180px;margin:0 auto;padding-left:var(--gutter-l);padding-right:var(--gutter-r)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* top strip */
+.strip{background:var(--sunk);border-bottom:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.strip .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:6px}
+
+/* header */
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;gap:20px;padding-block:14px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;text-decoration:none;line-height:1.1}
+.brand b{font-family:var(--f-display);font-size:22px;font-weight:900;letter-spacing:.06em}
+.brand span{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
+nav.main{display:flex;gap:4px 18px;flex-wrap:wrap;flex:1;font-size:14.5px}
+nav.main a{text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+nav.main a:hover{border-color:var(--gold)}
+.cart-btn{font:inherit;font-size:14px;background:none;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.cart-btn .n{font-family:var(--f-mono);background:var(--gold);color:var(--bg);border-radius:999px;min-width:20px;text-align:center;font-size:12px;padding:0 6px}
+
+/* hero */
+.hero{padding-block:56px 40px;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(34px,5.4vw,64px);font-weight:900;letter-spacing:.02em}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p.lead{color:var(--muted);max-width:30em;margin:18px 0 0}
+.hero .quote{margin-top:28px;padding-left:16px;border-left:2px solid var(--gold);font-family:var(--f-display);font-size:16px}
+.hero .quote small{display:block;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);letter-spacing:.06em;margin-top:4px}
+.hero-stones{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hero-stones figure{margin:0;text-align:center}
+.hero-stones canvas{width:100%;max-width:100%;aspect-ratio:1;display:block;border-radius:50%}
+.hero-stones figcaption{font-family:var(--f-display);font-size:15px;margin-top:8px}
+.hero-stones figcaption small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+
+/* limited */
+.limited{padding-block:36px}
+.limited .box{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px 24px}
+.limited canvas{width:120px;height:120px;border-radius:50%;display:block}
+.limited h2{font-size:22px}
+.limited p{margin:6px 0 0;color:var(--muted)}
+.price{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:17px}
+.price s{color:var(--muted);font-size:13px;margin-right:6px}
+.btn{font:inherit;font-size:14px;font-weight:500;border:1px solid var(--fg);background:var(--fg);color:var(--bg);padding:8px 18px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:none;color:var(--fg)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* series */
+.series{padding-block:44px;border-top:1px solid var(--line)}
+.series-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:32px;align-items:end;margin-bottom:24px}
+.series-head h2{font-size:clamp(28px,3.6vw,40px);font-weight:900}
+.series-head h2 small{display:block;font-family:var(--f-mono);font-weight:400;font-size:13px;letter-spacing:.14em;color:var(--muted);margin-top:4px}
+.series-head p{margin:0;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:12.5px}
+.facts span{font-family:var(--f-mono);color:var(--fg)}
+.facts span i{font-style:normal;color:var(--muted);margin-right:6px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.card{display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .ph{position:relative;background:var(--sunk);border-radius:4px;overflow:hidden;aspect-ratio:1;max-width:100%}
+.card .ph canvas{width:100%;height:100%;display:block}
+.tag{position:absolute;top:8px;left:8px;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:2px;background:var(--bg);color:var(--fg)}
+.tag.sold{color:var(--sold)}
+.card h3{font-family:var(--f-body);font-size:15px;font-weight:500;line-height:1.4}
+.card .spec{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.card .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.card .add{font:inherit;font-size:13px;background:none;border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.card .add:hover{border-color:var(--gold)}
+.card .add[disabled]{opacity:.45;cursor:not-allowed}
+.more{margin-top:20px;text-align:right;font-size:14px}
+.more a{color:var(--gold);text-decoration:none}
+
+/* instagram wall */
+.ig{padding-block:48px;border-top:1px solid var(--line);background:var(--sunk)}
+.ig-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.ig-head h2{font-size:30px}
+.ig-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.ig-grid a{position:relative;display:block;aspect-ratio:1;max-width:100%;overflow:hidden;border-radius:2px;background:var(--surface)}
+.ig-grid canvas{width:100%;height:100%;display:block;transition:transform .4s}
+.ig-grid a:hover canvas{transform:scale(1.05)}
+.ig-grid .vid{position:absolute;right:6px;top:6px;font-family:var(--f-mono);font-size:10.5px;background:var(--bg);color:var(--fg);padding:1px 6px;border-radius:2px}
+.note{font-size:13px;color:var(--muted);margin-top:14px}
+
+/* philosophy */
+.philo{padding-block:64px;text-align:left}
+.philo .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:40px}
+.philo h2{font-size:clamp(26px,3vw,36px);font-weight:900}
+.philo p{margin:0 0 14px;max-width:34em}
+
+/* footer */
+footer{border-top:1px solid var(--line);background:var(--surface);font-size:14px}
+footer .cols{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:28px;padding-block:40px}
+footer h4{font-size:13px;letter-spacing:.12em;margin:0 0 10px;color:var(--muted);font-weight:500}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--gold)}
+.pay{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pay span{font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);border-radius:3px;padding:1px 6px;color:var(--muted)}
+.copy{border-top:1px solid var(--line);padding-block:14px;font-size:12px;color:var(--muted)}
+
+/* cart drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:20;padding:calc(20px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) 20px;display:flex;flex-direction:column;gap:14px;box-shadow:-12px 0 40px rgba(0,0,0,.25)}
+.drawer header{display:flex;justify-content:space-between;align-items:center}
+.drawer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;overflow:auto;flex:1}
+.drawer li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:8px;font-size:14px}
+.drawer li button{background:none;border:none;color:var(--muted);cursor:pointer;font:inherit;font-size:12px}
+.drawer .total{display:flex;justify-content:space-between;font-weight:700}
+
+@media (max-width:900px){
+  .hero .wrap,.series-head,.philo .wrap{grid-template-columns:minmax(0,1fr)}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ig-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  footer .cols{grid-template-columns:1fr 1fr}
+  .limited .box{grid-template-columns:auto 1fr}
+  .limited .box .act{grid-column:1/-1}
+}
+@media (max-width:480px){
+  nav.main{order:3;flex-basis:100%;font-size:14px}
+  .limited canvas{width:84px;height:84px}
+  footer .cols{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="strip"><div class="wrap"><span>天然水晶原礦 · 每顆實拍 · 單一現貨</span><span>全館滿 NT$3,000 免運 · LINE 一對一挑石</span></div></div>
+
+<header class="site"><div class="wrap">
+  <a class="brand" href="#top"><b>aics2k</b><span>晶礦室</span></a>
+  <nav class="main" aria-label="主選單">
+    <a href="#super-seven">超七</a>
+    <a href="#black-rutile">黑銀鈦</a>
+    <a href="#gold-rutile">鈦晶</a>
+    <a href="#ig-wall">IG 實拍牆</a>
+    <a href="#about">關於我們</a>
+    <a href="#contact">聯絡</a>
+  </nav>
+  <button class="cart-btn" id="cartBtn" type="button">詢問清單 <span class="n" id="cartN">0</span></button>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <div class="eyebrow">Super Seven · Black Rutile · Golden Rutile</div>
+    <h1>每一顆石頭，<br>都藏著一道<em>光的紋路</em></h1>
+    <p class="lead">我們只挑三種晶體：層層包裹的超七、黑髮如墨的黑銀鈦、金絲閃耀的鈦晶。每件商品都是單一現貨，照片與影片皆為實物拍攝，你看到的就是你會收到的那一顆。</p>
+    <div class="quote">「水晶花了千萬年長成這樣，挑一顆，不必急。」<small>— 晶礦室</small></div>
+  </div>
+  <div class="hero-stones">
+    <figure><canvas data-stone="seven" data-seed="11"></canvas><figcaption>超七<small>SUPER SEVEN</small></figcaption></figure>
+    <figure><canvas data-stone="black" data-seed="22"></canvas><figcaption>黑銀鈦<small>BLACK RUTILE</small></figcaption></figure>
+    <figure><canvas data-stone="gold" data-seed="33"></canvas><figcaption>鈦晶<small>GOLDEN RUTILE</small></figcaption></figure>
+  </div>
+</div></section>
+
+<section class="limited"><div class="wrap">
+  <div class="box">
+    <canvas data-stone="gold" data-seed="7" width="240" height="240"></canvas>
+    <div>
+      <div class="eyebrow">本週限量</div>
+      <h2>巴西金髮鈦晶 原礦柱</h2>
+      <p>金絲密度高、晶體清透，附產地卡與實拍影片。<span class="mono">286 g · 9.4 × 4.1 cm</span></p>
+    </div>
+    <div class="act" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <span class="price"><s>NT$18,800</s>NT$15,800</span>
+      <button class="btn" type="button" data-add="限量 巴西金髮鈦晶原礦柱|15800">加入詢問清單</button>
+    </div>
+  </div>
+</div></section>
+
+<section class="series" id="super-seven"><div class="wrap">
+  <div class="series-head">
+    <div><div class="eyebrow">Series 01</div><h2>超七<small>SUPER SEVEN · MELODY'S STONE</small></h2></div>
+    <div>
+      <p>又稱「神聖七」，一顆晶體裡同時含有紫水晶、茶晶、白水晶與多種針鐵礦、纖鐵礦、金紅石、黑銀鈦包體。層層紫紅與金褐交疊，每一顆的紋路都不會重複。</p>
+      <div class="facts"><span><i>硬度</i>Mohs 7</span><span><i>主要產地</i>巴西 Espírito Santo</span><span><i>包體</i>7 種礦物</span></div>
+    </div>
+  </div>
+  <div class="grid" data-series="seven"></div>
+  <div class="more"><a href="#super-seven">查看全部超七 →</a></div>
+</div></section>
+
+<section class="series" id="black-rutile"><div class="wrap">
+  <div class="series-head">
+    <div><div class="eyebrow">Series 02</div><h2>黑銀鈦<small>BLACK RUTILE QUARTZ</small></h2></div>
+    <div>
+      <p>透明石英中穿過根根黑色電氣石或金紅石針，在光下會泛出銀色光澤。髮絲越直、越密、越有銀光，等級越高。</p>
+      <div class="facts"><span><i>硬度</i>Mohs 7</span><span><i>主要產地</i>巴西 Bahia</span><span><i>看點</i>銀光反射 · 髮絲走向</span></div>
+    </div>
+  </div>
+  <div class="grid" data-series="black"></div>
+  <div class="more"><a href="#black-rutile">查看全部黑銀鈦 →</a></div>
+</div></section>
+
+<section class="series" id="gold-rutile"><div class="wrap">
+  <div class="series-head">
+    <div><div class="eyebrow">Series 03</div><h2>鈦晶<small>GOLDEN RUTILATED QUARTZ</small></h2></div>
+    <div>
+      <p>石英裡包覆金黃色金紅石針，粗者稱「髮晶」，片狀排列成花者稱「鈦晶花」。金色越亮、排列越整齊，越受藏家青睞。</p>
+      <div class="facts"><span><i>硬度</i>Mohs 7</span><span><i>主要產地</i>巴西 Bahia</span><span><i>型態</i>手串 · 吊墜 · 原礦 · 球</span></div>
+    </div>
+  </div>
+  <div class="grid" data-series="gold"></div>
+  <div class="more"><a href="#gold-rutile">查看全部鈦晶 →</a></div>
+</div></section>
+
+<section class="ig" id="ig-wall"><div class="wrap">
+  <div class="ig-head">
+    <div><div class="eyebrow">Instagram · @aics2k</div><h2>IG 實拍牆</h2></div>
+    <a class="btn ghost" href="https://www.instagram.com/aics2k/" target="_blank" rel="noopener">追蹤 @aics2k</a>
+  </div>
+  <div class="ig-grid" id="igGrid"></div>
+  <p class="note">預覽版：這裡的圖是暫代用的示意，等 IG 的照片與影片檔案到位後會換成實拍。</p>
+</div></section>
+
+<section class="philo" id="about"><div class="wrap">
+  <div><div class="eyebrow">About</div><h2>為什麼只做三種石頭</h2></div>
+  <div>
+    <p>超七、黑銀鈦、鈦晶，看起來是三種截然不同的晶體，其實都是石英把其他礦物「收」進身體裡長成的。我們喜歡這種包容的樣子，也只專心挑這三種。</p>
+    <p>每一顆都在自然光下拍照、錄影，標上實際克數與尺寸。如果想看更多角度，加 LINE 就能請我們現場拍給你看。</p>
+  </div>
+</div></section>
+</main>
+
+<footer id="contact">
+  <div class="wrap cols">
+    <div>
+      <div class="brand"><b>aics2k</b><span>晶礦室</span></div>
+      <p style="color:var(--muted);margin:12px 0 0">天然超七、黑銀鈦、鈦晶專門店。</p>
+      <div class="pay"><span>VISA</span><span>Mastercard</span><span>JCB</span><span>ATM 轉帳</span><span>超商取貨付款</span><span>LINE Pay</span></div>
+    </div>
+    <div><h4>商品</h4><ul><li><a href="#super-seven">超七</a></li><li><a href="#black-rutile">黑銀鈦</a></li><li><a href="#gold-rutile">鈦晶</a></li></ul></div>
+    <div><h4>顧客服務</h4><ul><li><a href="#about">常見問題</a></li><li><a href="#about">退換貨政策</a></li><li><a href="#about">運送說明</a></li><li><a href="#about">隱私權政策</a></li></ul></div>
+    <div><h4>聯絡我們</h4><ul><li><a href="https://www.instagram.com/aics2k/" target="_blank" rel="noopener">Instagram @aics2k</a></li><li>LINE：（待填）</li><li>Email：（待填）</li></ul></div>
+  </div>
+  <div class="copy"><div class="wrap">© 2026 aics2k 晶礦室 · 商品圖為預覽示意</div></div>
+</footer>
+
+<aside class="drawer" id="drawer" hidden aria-label="詢問清單">
+  <header><h3 style="font-size:18px">詢問清單</h3><button class="btn ghost" id="closeDrawer" type="button">關閉</button></header>
+  <ul id="cartList"></ul>
+  <div class="total"><span>合計</span><span class="mono" id="cartTotal">NT$0</span></div>
+  <p style="font-size:13px;color:var(--muted);margin:0">送出後我們會透過 LINE 或 IG 私訊與你確認商品與付款方式。</p>
+  <button class="btn" type="button" id="sendList">送出詢問</button>
+  <p id="sentMsg" hidden style="font-size:13px;color:var(--gold);margin:0">預覽版尚未接上訂單系統，正式上線後這裡會送出詢問。</p>
+</aside>
+
+<script>
+const PRODUCTS={
+ seven:[
+  ["超七 紫金層次手串 10mm","24 g · 18 顆",4680,""],
+  ["超七 草莓紅包體 吊墜","8.6 g · 3.2 × 2.1 cm",3280,"新品"],
+  ["超七 原礦切面擺件","412 g · 11 × 6.5 cm",12800,""],
+  ["超七 金髮包體 圓珠手串 12mm","31 g · 16 顆",6200,"售完"]],
+ black:[
+  ["黑銀鈦 直髮銀光手串 9mm","19 g · 20 顆",3980,""],
+  ["黑銀鈦 密髮 水滴吊墜","10.2 g · 3.8 × 2.0 cm",2680,""],
+  ["黑銀鈦 水晶球 46mm","132 g · Ø 46 mm",8800,"新品"],
+  ["黑銀鈦 交叉髮 原礦","268 g · 8.1 × 5.4 cm",5600,"售完"]],
+ gold:[
+  ["巴西鈦晶 金髮手串 11mm","27 g · 17 顆",9800,""],
+  ["鈦晶花 片狀金絲 吊墜","12.4 g · 3.5 × 2.6 cm",7200,"新品"],
+  ["鈦晶 柱狀原礦","198 g · 7.6 × 3.9 cm",11600,""],
+  ["鈦晶 滿髮圓珠手串 13mm","36 g · 15 顆",15800,"售完"]]
+};
+const fmt=n=>"NT$"+n.toLocaleString("en-US");
+
+function rng(seed){let s=seed>>>0||1;return()=>((s=Math.imul(s^s>>>15,1|s)+0x6D2B79F5|0,((s^s>>>7)>>>0)%100000)/100000)}
+function drawStone(cv,kind,seed){
+  const r=rng(seed*9973+7),W=cv.width=cv.width>100?cv.width:400,H=cv.height=W,c=cv.getContext("2d");
+  const base={seven:["#3a1f3f","#6b3a63","#2a1626"],black:["#2b2c33","#64666f","#1a1a1f"],gold:["#8b6b33","#e3c27a","#5a4320"]}[kind];
+  const g=c.createRadialGradient(W*.38,H*.34,W*.05,W*.5,H*.5,W*.62);
+  if(kind==="gold"){g.addColorStop(0,"#f6ecd6");g.addColorStop(.6,"#c8b48c");g.addColorStop(1,"#6d5a3a")}
+  else if(kind==="black"){g.addColorStop(0,"#e9ebef");g.addColorStop(.55,"#9a9ca5");g.addColorStop(1,"#2d2e35")}
+  else{g.addColorStop(0,"#d9b8d9");g.addColorStop(.5,"#7a4b78");g.addColorStop(1,"#2a1428")}
+  c.fillStyle=g;c.fillRect(0,0,W,H);
+  if(kind==="seven"){for(let i=0;i<7;i++){c.fillStyle=`rgba(${120+r()*100|0},${40+r()*40|0},${50+r()*60|0},.22)`;c.beginPath();c.ellipse(W*r(),H*r(),W*(.1+r()*.35),H*(.04+r()*.12),r()*3,0,7);c.fill()}}
+  const n=kind==="seven"?60:kind==="black"?90:110;
+  for(let i=0;i<n;i++){
+    const x=W*r(),y=H*r(),a=(kind==="black"?.9:.5)+r()*(kind==="seven"?3:.9),L=W*(.08+r()*.5);
+    c.strokeStyle=kind==="gold"?`rgba(${220+r()*35|0},${170+r()*50|0},${70+r()*40|0},${.45+r()*.5})`:kind==="black"?`rgba(${15+r()*30|0},${15+r()*30|0},${20+r()*30|0},${.5+r()*.5})`:`rgba(${150+r()*80|0},${90+r()*60|0},${40+r()*30|0},${.3+r()*.5})`;
+    c.lineWidth=.4+r()*(kind==="black"?1.6:1.2);
+    c.beginPath();c.moveTo(x,y);c.lineTo(x+Math.cos(a)*L,y+Math.sin(a)*L);c.stroke();
+    if(kind==="black"&&r()<.3){c.strokeStyle="rgba(235,238,245,.55)";c.lineWidth=.5;c.beginPath();c.moveTo(x+1,y);c.lineTo(x+1+Math.cos(a)*L*.6,y+Math.sin(a)*L*.6);c.stroke()}
+  }
+  const hl=c.createRadialGradient(W*.32,H*.28,0,W*.32,H*.28,W*.3);hl.addColorStop(0,"rgba(255,255,255,.45)");hl.addColorStop(1,"rgba(255,255,255,0)");c.fillStyle=hl;c.fillRect(0,0,W,H);
+}
+
+document.querySelectorAll("[data-series]").forEach(el=>{
+  const k=el.dataset.series;
+  el.innerHTML=PRODUCTS[k].map((p,i)=>{const sold=p[3]==="售完";return `<article class="card">
+    <div class="ph"><canvas data-stone="${k}" data-seed="${i+k.length*13}"></canvas>${p[3]?`<span class="tag ${sold?"sold":""}">${p[3]}</span>`:""}</div>
+    <h3>${p[0]}</h3><div class="spec">${p[1]}</div>
+    <div class="row"><span class="price">${fmt(p[2])}</span><button class="add" type="button" ${sold?"disabled":""} data-add="${p[0]}|${p[2]}">${sold?"已售出":"加入清單"}</button></div>
+  </article>`}).join("");
+});
+const ig=document.getElementById("igGrid"),kinds=["seven","black","gold"];
+ig.innerHTML=Array.from({length:12},(_,i)=>`<a href="https://www.instagram.com/aics2k/" target="_blank" rel="noopener" aria-label="在 Instagram 查看貼文 ${i+1}"><canvas data-stone="${kinds[i%3]}" data-seed="${100+i}"></canvas>${i%4===1?'<span class="vid">影片</span>':""}</a>`).join("");
+document.querySelectorAll("canvas[data-stone]").forEach(cv=>drawStone(cv,cv.dataset.stone,+cv.dataset.seed));
+
+const cart=[],drawer=document.getElementById("drawer");
+function renderCart(){
+  document.getElementById("cartN").textContent=cart.length;
+  document.getElementById("cartList").innerHTML=cart.length?cart.map((it,i)=>`<li><span>${it.n}<br><span class="mono">${fmt(it.p)}</span></span><button type="button" data-rm="${i}">移除</button></li>`).join(""):'<li style="border:none;color:var(--muted)">還沒有挑選商品。在商品下方按「加入清單」。</li>';
+  document.getElementById("cartTotal").textContent=fmt(cart.reduce((s,it)=>s+it.p,0));
+}
+document.addEventListener("click",e=>{
+  const a=e.target.closest("[data-add]");
+  if(a){const[n,p]=a.dataset.add.split("|");if(!cart.some(it=>it.n===n))cart.push({n,p:+p});renderCart();drawer.hidden=false;document.getElementById("sentMsg").hidden=true}
+  const rm=e.target.closest("[data-rm]");if(rm){cart.splice(+rm.dataset.rm,1);renderCart()}
+});
+document.getElementById("cartBtn").onclick=()=>{renderCart();drawer.hidden=false};
+document.getElementById("closeDrawer").onclick=()=>drawer.hidden=true;
+document.getElementById("sendList").onclick=()=>document.getElementById("sentMsg").hidden=false;
+renderCart();
+</script>
+
+</body>
+</html>
